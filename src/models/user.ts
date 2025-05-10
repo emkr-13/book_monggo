@@ -12,14 +12,13 @@ const userSchema = new Schema(
       unique: true,
       maxlength: 50,
     },
-    fullname: {
+    password: {
       type: String,
       required: true,
       maxlength: 255,
     },
-    password: {
+    fullname: {
       type: String,
-      required: true,
       maxlength: 255,
     },
     refreshToken: {

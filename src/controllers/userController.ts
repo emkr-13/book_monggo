@@ -60,7 +60,7 @@ export const getProfile = async (
 
     // Buat objek data user yang akan dikirimkan
     const dataUser = {
-      username: user.email,
+      email: user.email,
       fullname: user.fullname,
       usercreated: user.createdAt,
     };

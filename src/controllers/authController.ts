@@ -3,7 +3,6 @@ import { sendResponse } from "../utils/responseHelper";
 import { generateJwtToken, generateRefreshToken } from "../utils/helper";
 import User from "../models/user";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -21,7 +20,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     if (!user) {
       sendResponse(res, 401, "Invalid credentials");
     }
-
+    console.log(user);
     // Verifikasi password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {

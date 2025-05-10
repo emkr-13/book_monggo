@@ -16,3 +16,5 @@ connectToDatabase().then(async () => {
     console.log(`Access the application at http://localhost:${PORT}`);
   });
 });
+
+export default app;
