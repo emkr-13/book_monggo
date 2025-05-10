@@ -1,51 +1,59 @@
 import mongoose from "mongoose";
-import User from "../models/user";
+import "dotenv/config";
 import bcrypt from "bcryptjs";
+import { deleteAllUsers, createMultipleUsers } from "../repositories/userRepository";
 
-export const seedUsers = async () => {
+const seedUsers = async () => {
   try {
-    // Pastikan terhubung ke MongoDB
+    // 1. Connect to MongoDB
     if (mongoose.connection.readyState !== 1) {
-      // 1 = CONNECTED
       await mongoose.connect(
         process.env.MONGODB_URI || "mongodb://localhost:27017/book"
       );
       console.log("Connected to MongoDB");
     }
 
-    // Hapus semua data pengguna sebelum menambahkan data baru
-    await User.deleteMany();
+    // 2. Hapus semua user yang ada
+    await deleteAllUsers();
+    console.log("Deleted all existing users");
 
-    // Hash password
+    // 3. Hash password
     const hashedPassword = await bcrypt.hash("password123", 10);
 
-    // Tambahkan data pengguna
-    const users = [
+    // 4. Data user yang akan di-seed
+    const usersToSeed = [
       {
         email: "admin@mail.com",
-        fullname: "admin",
+        fullname: "Admin",
         password: hashedPassword,
       },
       {
         email: "user@mail.com",
-        fullname: "user",
+        fullname: "Regular User",
         password: hashedPassword,
       },
     ];
 
-    await User.insertMany(users);
+    // 5. Buat user baru
+    const createdUsers = await createMultipleUsers(usersToSeed);
+    console.log(`Successfully seeded ${createdUsers.length} users`);
 
-    console.log("Users seeded successfully");
+    return createdUsers;
   } catch (error) {
     console.error("Error seeding users:", error);
+    throw error;
   } finally {
-    // Tutup koneksi setelah selesai
+    // 6. Tutup koneksi
     await mongoose.disconnect();
     console.log("Disconnected from MongoDB");
   }
 };
 
-// ✅ Jalankan fungsi jika file di-run langsung dengan ts-node
+// Jalankan jika file di-execute langsung
 if (require.main === module) {
-  seedUsers();
+  seedUsers()
+    .then(() => process.exit(0))
+    .catch(() => process.exit(1));
 }
+
+export default seedUsers;

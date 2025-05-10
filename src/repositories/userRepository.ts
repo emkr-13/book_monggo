@@ -53,3 +53,17 @@ export const createUser = async (userData: {
   const user = new User(userData);
   return user.save();
 };
+
+export const deleteAllUsers = async (): Promise<void> => {
+  await User.deleteMany({});
+};
+
+export const createMultipleUsers = async (
+  usersData: Array<{
+    email: string;
+    password: string;
+    fullname?: string;
+  }>
+): Promise<IUser[]> => {
+  return User.insertMany(usersData);
+};
