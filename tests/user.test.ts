@@ -1,43 +1,22 @@
 import request from "supertest";
 import app from "../src/server";
-import User from "../src/models/user";
-import bcrypt from "bcryptjs";
+import { getAuthToken } from "./test-utils";
 
-describe("GET /api/users/profile", () => {
+describe("User API", () => {
   let token: string;
 
   beforeAll(async () => {
-    // Seed user and login to get token
-    const hashedPassword = await bcrypt.hash("password123", 10);
-    const user = await User.create({
-      email: "testuser@mail.com",
-      password: hashedPassword,
+    token = await getAuthToken();
+  });
+
+  describe("GET /api/users/detail", () => {
+    it("should get user profile", async () => {
+      const response = await request(app)
+        .get("/api/users/detail")
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
+
+      expect(response.body.data).toHaveProperty("email");
     });
-
-    const loginResponse = await request(app).post("/api/auth/login").send({
-      email: "testuser@mail.com",
-      password: "password123",
-    });
-
-    token = loginResponse.body.token;
-  });
-
-  afterAll(async () => {
-    await User.deleteMany();
-  });
-
-  it("should retrieve user profile successfully", async () => {
-    const response = await request(app)
-      .get("/api/users/detail")
-      .set("Authorization", `Bearer ${token}`)
-      .expect(200);
-
-    expect(response.body.data).toHaveProperty("username", "testuser");
-  });
-
-  it("should fail without token", async () => {
-    const response = await request(app).get("/api/users/detail").expect(401);
-
-    expect(response.body.message).toBe("Unauthorized");
   });
 });

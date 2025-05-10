@@ -6,8 +6,12 @@ export const sendResponse = (
   message: string,
   data?: any
 ) => {
+  if (res.headersSent) {
+    console.warn("Headers already sent, cannot send response");
+    return;
+  }
   return res.status(statusCode).json({
-    success: statusCode >= 200 && statusCode < 300, 
+    success: statusCode >= 200 && statusCode < 300,
     message,
     data,
   });
