@@ -68,27 +68,3 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const logout = async (req: Request, res: Response): Promise<void> => {
-  try {
-    // Ambil user ID dari request (dari middleware authenticate)
-    const userId = (req as any).user.id;
-
-    if (!userId) {
-      sendResponse(res, 400, "Unauthorized");
-    }
-
-    // Hapus refresh token dari database
-    await User.updateOne(
-      { _id: userId },
-      {
-        refreshToken: null,
-        refreshTokenExp: null,
-      }
-    );
-
-    sendResponse(res, 200, "Logout successful");
-  } catch (error) {
-    console.error("Error during logout:", error);
-    sendResponse(res, 500, "Logout failed", error);
-  }
-};
