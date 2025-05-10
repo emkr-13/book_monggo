@@ -44,3 +44,12 @@ export const clearRefreshToken = async (userId: string): Promise<void> => {
     }
   ).exec();
 };
+
+export const createUser = async (userData: {
+  email: string;
+  password: string;
+  fullname?: string;
+}): Promise<IUser> => {
+  const user = new User(userData);
+  return user.save();
+};
