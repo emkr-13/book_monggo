@@ -1,10 +1,24 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 
-const userSchema = new Schema(
+// Define the interface
+interface IUser extends Document {
+  _id: string;
+  email: string;
+  password: string;
+  fullname?: string;
+  refreshToken?: string;
+  refreshTokenExp?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
+}
+
+// Define the schema
+const userSchema = new Schema<IUser>(
   {
     _id: {
       type: String,
-      default: () => require("uuid").v4(), // generate UUID v4
+      default: () => require("uuid").v4(),
     },
     email: {
       type: String,
@@ -26,21 +40,16 @@ const userSchema = new Schema(
       maxlength: 255,
     },
     refreshTokenExp: Date,
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      default: Date.now,
-    },
     deletedAt: Date,
   },
   {
-    versionKey: false, // disable __v
-    timestamps: true, // auto manage createdAt & updatedAt
+    versionKey: false,
+    timestamps: true,
   }
 );
 
-// Jika ingin mengganti nama collection di DB
-export default model("User", userSchema, "users");
+// Create the model
+const User = model<IUser>("User", userSchema, "users");
+
+// Export both the model and interface
+export { User, IUser };
