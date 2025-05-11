@@ -2,17 +2,19 @@ import { Response } from "express";
 
 export const sendResponse = (
   res: Response,
-  statusCode: number,
+  status: number,
   message: string,
-  data?: any
+  data?: any,
+  error?: any
 ) => {
-  if (res.headersSent) {
-    console.warn("Headers already sent, cannot send response");
-    return;
-  }
-  return res.status(statusCode).json({
-    success: statusCode >= 200 && statusCode < 300,
+  
+  const response: any = {
+    status,
     message,
-    data,
-  });
+  };
+
+  if (data) response.data = data;
+  if (error) response.error = error;
+
+  return res.status(status).json(response);
 };

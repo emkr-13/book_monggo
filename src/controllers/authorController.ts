@@ -32,7 +32,7 @@ export const getAuthor = async (req: Request, res: Response) => {
 export const createAuthor = async (req: Request, res: Response) => {
   try {
     const author = await authorService.addAuthor(req.body);
-    sendResponse(res, 201, "Author created successfully", author);
+    sendResponse(res, 201, "Author created successfully");
   } catch (error: any) {
     sendResponse(res, 500, error.message);
   }
@@ -54,7 +54,7 @@ export const deleteAuthor = async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id);
     const author = await authorService.removeAuthor(id);
-    sendResponse(res, 200, "Author deleted successfully", author);
+    sendResponse(res, 200, "Author deleted successfully");
   } catch (error: any) {
     const status =
       error.message === "Author not found or already deleted" ? 404 : 500;
