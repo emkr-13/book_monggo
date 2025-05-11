@@ -1,12 +1,20 @@
-import type { Config } from "@jest/types";
+import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
-  preset: "ts-jest",
-  testEnvironment: "node",
-  moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1", // Jika Anda menggunakan alias path
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  setupFilesAfterEnv: ['./tests/jest.setup.ts'],
+  testPathIgnorePatterns: ['/node_modules/'],
+  moduleFileExtensions: ['ts', 'js', 'json'],
+  transform: {
+    '^.+\\.ts$': 'ts-jest'
   },
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"], // Opsional: Untuk setup global
+  testMatch: ['**/tests/**/*.test.ts'],
+  collectCoverageFrom: [
+    'src/controllers/**/*.ts',
+    'src/services/**/*.ts',
+    '!src/**/*.d.ts'
+  ]
 };
 
 export default config;

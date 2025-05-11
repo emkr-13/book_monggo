@@ -1,10 +1,5 @@
-import mongoose from "mongoose";
-import { connectToDatabase } from "./src/config/db";
+import { initializeTestEnv } from './src/tests/test-utils';
 
-beforeAll(async () => {
-  await connectToDatabase();
-});
-
-afterAll(async () => {
-  await mongoose.connection.close();
-});
+module.exports = async () => {
+  await initializeTestEnv();
+};
