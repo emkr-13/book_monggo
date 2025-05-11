@@ -1,5 +1,6 @@
 import * as bookRepository from "../repositories/bookRepository";
-
+import { BookResponseDto } from "../dtos/book.dto";
+import * as authorRepository from "../repositories/authorRepository";
 export const getBooks = async (
   page: number = 1,
   limit: number = 10,
@@ -43,6 +44,19 @@ export const removeBook = async (id: number) => {
   return book;
 };
 
-export const getAuthorBooks = async (authorId: number) => {
-  return bookRepository.getBooksByAuthor(authorId);
+export const getAuthorBooks = async (
+  authorId: number
+): Promise<BookResponseDto[]> => {
+  // Validate author exists
+  const authorExists = authorRepository.getAuthorById(authorId);
+  if (!authorExists) {
+    throw new Error("Author not found");
+  }
+
+  try {
+    return await bookRepository.getBooksByAuthor(authorId);
+  } catch (error) {
+    console.error(`Error fetching books for author ${authorId}:`, error);
+    throw new Error("Failed to fetch books");
+  }
 };

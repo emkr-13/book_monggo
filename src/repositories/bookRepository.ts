@@ -1,6 +1,7 @@
 import Book, { IBook } from "../models/book";
 import Author, { IAuthor } from "../models/author";
 import { pagination, PaginationResponse } from "../utils/helper";
+import { BookResponseDto } from "dtos/book.dto";
 
 export const createBooks = async (booksData: any[]) => {
   // Create one by one to trigger auto-increment
@@ -102,8 +103,28 @@ export const deleteBook = async (id: number): Promise<IBook | null> => {
   );
 };
 
-export const getBooksByAuthor = async (authorId: number): Promise<IBook[]> => {
-  return Book.find({ author: authorId, deletedAt: null })
-    .populate("author", "id name")
-    .sort({ publishedYear: -1 });
+export const getBooksByAuthor = async (authorId: number): Promise<BookResponseDto[]> => {
+  // Find books by author ID (number)
+  const books = await Book.find({ 
+    author: authorId,
+    deletedAt: null 
+  }).lean();
+
+  // Get author details
+  const author = await Author.findOne({ id: authorId }).lean();
+
+  // Map to response DTO
+  return books.map(book => ({
+    id: book.id,
+    title: book.title,
+    author: author ? {
+      id: author.id,
+      name: author.name,
+      nationality: author.nationality
+    } : null,
+    publishedYear: book.publishedYear,
+    genre: book.genre,
+    createdAt: book.createdAt,
+    updatedAt: book.updatedAt
+  }));
 };
