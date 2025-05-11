@@ -1,14 +1,16 @@
-# Test Book
+# 📘 Test Book
 
-Teknologi yang digunakan:
+## 🔧 Teknologi yang Digunakan
 
-- TypeScript
-- Node.js (TS)
-- Monggo DB (database)
+- **TypeScript**
+- **Node.js (TS)**
+- **MongoDB** (Database)
 
-## Installation
+---
 
-### Step 1: Setup Environment
+## ⚙️ Instalasi
+
+### 1. Setup Environment
 
 Salin file `.env.example` menjadi `.env`:
 
@@ -16,16 +18,19 @@ Salin file `.env.example` menjadi `.env`:
 cp .env.example .env
 ```
 
-### Step 2: Install Dependencies
+---
 
-Jalankan perintah berikut untuk menginstal semua package:
+### 2. Install Dependencies
+
+Jalankan perintah berikut untuk menginstal semua dependensi:
 
 ```bash
 npm install
 ```
 
+---
 
-### Step 3: Menjalankan Seeder
+### 3. Menjalankan Seeder
 
 Jalankan file seeder sesuai dengan nama file di folder `seeders`. Contoh:
 
@@ -33,10 +38,19 @@ Jalankan file seeder sesuai dengan nama file di folder `seeders`. Contoh:
 ts-node src/seeders/userSeeder.ts
 ```
 
-## Menjalankan Aplikasi
+> Pastikan `ts-node` sudah terinstal secara global atau tersedia di `devDependencies`.
 
-Untuk menjalankan aplikasi, gunakan perintah berikut:
+---
+
+## 🚀 Menjalankan Aplikasi
+
+Untuk menjalankan aplikasi dalam mode development:
 
 ```bash
 npm run dev
+```
+
+---
+
+Untuk Dokumentasi Api ada di folder dokumentasi-api
 ```
